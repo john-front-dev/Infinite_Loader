@@ -28,12 +28,12 @@
 
 1. Клонируйте репозиторий:
    ```sh
-   git clone <URL_вашего_репозитория>
+   git clone https://github.com/john-front-dev/Infinite_Loader.git
    ```
 
 2. Перейдите в директорию проекта:
    ```sh
-   cd <название_проекта>
+   cd Infinite_Loader
    ```
 
 3. Установите зависимости:
