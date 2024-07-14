@@ -2,7 +2,6 @@ import React, { useState } from "react";
 import { Button, Box } from "@mui/material";
 import DataTable from "./components/DataTable";
 import CreateUserModal from "./components/CreateUserModal";
-import type { User } from "./types/types";
 
 function App({}) {
   const [open, setOpen] = useState<boolean>(false);

@@ -2,6 +2,7 @@
   max-height: 80vh;
   overflow-y: auto;
 }
+
 .data-table-container .MuiTableHead-root {
   position: -webkit-sticky;
   position: sticky;

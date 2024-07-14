@@ -10,6 +10,7 @@ import {
 } from "@mui/material";
 import { createUser } from "../api/api";
 import type { User } from "../types/types";
+
 interface CreateUserModalProps {
   open: boolean;
   handleCloseModal: () => void;
@@ -21,44 +22,60 @@ const CreateUserModal: React.FC<CreateUserModalProps> = ({
   handleCloseModal,
   onCreateUser,
 }) => {
-  const [newUserName, setNewUserName] = useState<string>("");
-  const [newUserEmail, setNewUserEmail] = useState<string>("");
-  const [newUserStreet, setNewUserStreet] = useState<string>("");
-  const [newUserPhone, setNewUserPhone] = useState<string>("");
-  const [newUserUsername, setNewUserUsername] = useState<string>("");
-  const [newUserWebsite, setNewUserWebsite] = useState<string>("");
+  const [newUser, setNewUser] = useState<{
+    name: string;
+    email: string;
+    street: string;
+    phone: string;
+    username: string;
+    website: string;
+  }>({
+    name: "",
+    email: "",
+    street: "",
+    phone: "",
+    username: "",
+    website: "",
+  });
   const [phoneError, setPhoneError] = useState<boolean>(false);
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target;
+    setNewUser((prev) => ({ ...prev, [name]: value }));
+  };
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const isPhoneValid =
-      /^\d+$/.test(newUserPhone) && newUserPhone.length === 12;
+      /^\d+$/.test(newUser.phone) && newUser.phone.length === 12;
     setPhoneError(!isPhoneValid);
 
     if (!isPhoneValid) {
       return;
     }
 
-    const newUser: User = {
-      name: newUserName,
-      email: newUserEmail,
+    const userToCreate: User = {
+      name: newUser.name,
+      email: newUser.email,
       address: {
-        street: newUserStreet,
+        street: newUser.street,
       },
-      phone: newUserPhone,
-      username: newUserUsername,
-      website: newUserWebsite,
+      phone: newUser.phone,
+      username: newUser.username,
+      website: newUser.website,
     };
 
     try {
-      await createUser(newUser);
-      setNewUserName("");
-      setNewUserEmail("");
-      setNewUserStreet("");
-      setNewUserPhone("");
-      setNewUserUsername("");
-      setNewUserWebsite("");
-      onCreateUser(newUser);
+      await createUser(userToCreate);
+      setNewUser({
+        name: "",
+        email: "",
+        street: "",
+        phone: "",
+        username: "",
+        website: "",
+      });
+      onCreateUser(userToCreate);
       handleCloseModal();
     } catch (error) {
       console.error("Ошибка при создании пользователя:", error);
@@ -78,8 +95,9 @@ const CreateUserModal: React.FC<CreateUserModalProps> = ({
                 required
                 fullWidth
                 label="Имя"
-                value={newUserName}
-                onChange={(e) => setNewUserName(e.target.value)}
+                name="name"
+                value={newUser.name}
+                onChange={handleChange}
               />
             </Grid>
             <Grid item xs={12}>
@@ -88,8 +106,9 @@ const CreateUserModal: React.FC<CreateUserModalProps> = ({
                 fullWidth
                 label="Email"
                 type="email"
-                value={newUserEmail}
-                onChange={(e) => setNewUserEmail(e.target.value)}
+                name="email"
+                value={newUser.email}
+                onChange={handleChange}
               />
             </Grid>
             <Grid item xs={12}>
@@ -97,8 +116,9 @@ const CreateUserModal: React.FC<CreateUserModalProps> = ({
                 required
                 fullWidth
                 label="Улица"
-                value={newUserStreet}
-                onChange={(e) => setNewUserStreet(e.target.value)}
+                name="street"
+                value={newUser.street}
+                onChange={handleChange}
               />
             </Grid>
             <Grid item xs={12}>
@@ -106,15 +126,17 @@ const CreateUserModal: React.FC<CreateUserModalProps> = ({
                 required
                 fullWidth
                 label="Номер телефона"
-                value={newUserPhone}
+                name="phone"
+                value={newUser.phone}
                 error={phoneError}
                 helperText={
                   phoneError
                     ? "Неверный формат номера телефона. Номер должен состоять из 12 цифр."
                     : ""
                 }
-                onChange={(e) => setNewUserPhone(e.target.value)}
+                onChange={handleChange}
                 sx={{ borderColor: phoneError ? "red" : null }}
+                inputProps={{ maxLength: 12 }}
               />
             </Grid>
             <Grid item xs={12}>
@@ -122,8 +144,9 @@ const CreateUserModal: React.FC<CreateUserModalProps> = ({
                 required
                 fullWidth
                 label="Ник"
-                value={newUserUsername}
-                onChange={(e) => setNewUserUsername(e.target.value)}
+                name="username"
+                value={newUser.username}
+                onChange={handleChange}
               />
             </Grid>
             <Grid item xs={12}>
@@ -131,8 +154,9 @@ const CreateUserModal: React.FC<CreateUserModalProps> = ({
                 required
                 fullWidth
                 label="Сайт"
-                value={newUserWebsite}
-                onChange={(e) => setNewUserWebsite(e.target.value)}
+                name="website"
+                value={newUser.website}
+                onChange={handleChange}
               />
             </Grid>
             <DialogActions>
