@@ -8,8 +8,8 @@ import {
   Typography,
   DialogActions,
 } from "@mui/material";
-import { createUser } from "../api/api";
-import type { User } from "../types/types";
+import { createUser } from "../../api/api";
+import type { User } from "../../types/types";
 
 interface CreateUserModalProps {
   open: boolean;
@@ -41,7 +41,13 @@ const CreateUserModal: React.FC<CreateUserModalProps> = ({
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
-    setNewUser((prev) => ({ ...prev, [name]: value }));
+
+    if (name === "phone") {
+      const onlyNumbers = value.replace(/\D/g, "");
+      setNewUser((prev) => ({ ...prev, [name]: onlyNumbers }));
+    } else {
+      setNewUser((prev) => ({ ...prev, [name]: value }));
+    }
   };
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {

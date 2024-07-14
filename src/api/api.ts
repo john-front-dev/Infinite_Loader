@@ -27,22 +27,3 @@ export const createUser = async (userData: Omit<User, "id">): Promise<User> => {
     throw error;
   }
 };
-
-export const updateUser = async (id: number, userData: Partial<User>): Promise<User> => {
-  try {
-    const response = await axios.put<User>(`${BASE_URL}/users/${id}`, userData);
-    return response.data;
-  } catch (error) {
-    console.error("Произошла ошибка при обновлении пользователя:", error);
-    throw error;
-  }
-};
-
-export const deleteUser = async (id: number): Promise<void> => {
-  try {
-    await axios.delete(`${BASE_URL}/users/${id}`);
-  } catch (error) {
-    console.error("Произошла ошибка при удалении пользователя:", error);
-    throw error;
-  }
-};

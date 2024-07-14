@@ -1,11 +1,11 @@
 import React, { useState, useEffect, useCallback } from "react";
-import { useMemo } from "react";
 import {
   MaterialReactTable,
   useMaterialReactTable,
 } from "material-react-table";
-import { getUsers } from "../api/api";
-import type { User } from "../types/types";
+import { getUsers } from "../../api/api";
+import type { User } from "../../types/types";
+import { columns } from "./columns";
 import "./DataTable.css";
 
 const DataTableComponent: React.FC = () => {
@@ -29,41 +29,14 @@ const DataTableComponent: React.FC = () => {
     fetchUsers();
   }, [fetchUsers]);
 
-  const handleScroll = (event: React.UIEvent<HTMLDivElement>) => {
-    const { scrollTop, scrollHeight, clientHeight } = event.currentTarget;
-    if (scrollHeight - scrollTop <= clientHeight + 50 && hasMore) {
-      setPage((prevPage) => prevPage + 1);
-    }
-  };
-
-  const columns = useMemo(
-    () => [
-      {
-        accessorKey: "name",
-        header: "Имя",
-      },
-      {
-        accessorKey: "email",
-        header: "Почта",
-      },
-      {
-        accessorKey: "username",
-        header: "Ник",
-      },
-      {
-        accessorKey: "phone",
-        header: "Номер телефона",
-      },
-      {
-        accessorKey: "website",
-        header: "Сайт",
-      },
-      {
-        accessorKey: "address.street",
-        header: "Адресс",
-      },
-    ],
-    []
+  const handleScroll = useCallback(
+    (event: React.UIEvent<HTMLDivElement>) => {
+      const { scrollTop, scrollHeight, clientHeight } = event.currentTarget;
+      if (scrollHeight - scrollTop <= clientHeight + 50 && hasMore) {
+        setPage((prevPage) => prevPage + 1);
+      }
+    },
+    [hasMore]  
   );
 
   const table = useMaterialReactTable({
@@ -75,10 +48,7 @@ const DataTableComponent: React.FC = () => {
   });
 
   return (
-    <div
-      className="table"
-      onScroll={handleScroll}
-    >
+    <div className="table" onScroll={handleScroll}>
       <MaterialReactTable table={table} />
     </div>
   );
