@@ -6,7 +6,6 @@ import {
 import { getUsers } from "../../api/api";
 import type { User } from "../../types/types";
 import { columns } from "./columns";
-import "./DataTable.css";
 
 const DataTableComponent: React.FC = () => {
   const [users, setUsers] = useState<User[]>([]);
@@ -36,7 +35,7 @@ const DataTableComponent: React.FC = () => {
         setPage((prevPage) => prevPage + 1);
       }
     },
-    [hasMore]  
+    [hasMore]
   );
 
   const table = useMaterialReactTable({
@@ -44,11 +43,16 @@ const DataTableComponent: React.FC = () => {
     data: users,
     enablePagination: false,
     enableRowNumbers: true,
+    enableStickyHeader: true,
     enableRowVirtualization: true,
+    muiTableContainerProps: {
+      sx: { maxHeight: "60vh" },
+      onScroll: handleScroll,
+    },
   });
 
   return (
-    <div className="table" onScroll={handleScroll}>
+    <div>
       <MaterialReactTable table={table} />
     </div>
   );

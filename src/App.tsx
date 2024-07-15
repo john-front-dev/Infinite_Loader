@@ -13,7 +13,7 @@ function App({}) {
   return (
     <>
       <Box mt={2} mb={2} display="flex" justifyContent="space-between">
-        <h2>Infinite Loader</h2>
+          <h2 style={{margin: '0px'}}>Infinite Loader</h2>
         <Button variant="contained" onClick={toggleModal}>
           Создать пользователя
         </Button>
